@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class FinancialTracker {
 
-    private static ArrayList<Transaction> transactions = new ArrayList<Transaction>();
+    //private static ArrayList<Transaction> transactions = new ArrayList<Transaction>();
     private static final String FILE_NAME = "transactions.csv";
     private static final String DATE_FORMAT = "yyyy-MM-dd";
     private static final String TIME_FORMAT = "HH:mm:ss";
@@ -78,10 +78,10 @@ public class FinancialTracker {
 
             BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true));
             System.out.println("Enter the date:");
-            String DATE_FORMATTER = scan.nextLine();
+            String date = scan.nextLine().format(DATE_FORMAT);
 
             System.out.println("Enter the time: ");
-            String TIME_FORMATTER = scan.nextLine();
+            String time = scan.nextLine().format(TIME_FORMAT);
 
             System.out.println("Enter a description of the transaction:");
             String description = scan.nextLine();
@@ -91,9 +91,13 @@ public class FinancialTracker {
 
             System.out.println("Enter the amount");
             double amount = scan.nextDouble();
+            while(amount < 0){
+                System.out.println("Please Enter an amount greater than 0");
+                amount = scan.nextDouble();
+            }
 
-            builder.append(DATE_FORMATTER).append("|");
-            builder.append(TIME_FORMATTER).append("|");
+            builder.append(date).append("|");
+            builder.append(time).append("|");
             builder.append(description).append("|");
             builder.append(vendor).append("|");
             builder.append(amount).append("|");
@@ -106,12 +110,51 @@ public class FinancialTracker {
         {e.printStackTrace();}
     }
 
-    private static void addPayment(Scanner scanner) {
+    private static void addPayment(Scanner scan) {
         // This method should prompt the user to enter the date, time, description, vendor, and amount of a payment.
         // The user should enter the date and time in the following format: yyyy-MM-dd HH:mm:ss
         // The amount received should be a positive number then transformed to a negative number.
         // After validating the input, a new `Transaction` object should be created with the entered values.
         // The new payment should be added to the `transactions` ArrayList.
+
+        try{
+            StringBuilder builder = new StringBuilder();
+
+            BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true));
+            System.out.println("Enter the date:");
+            String date = scan.nextLine().format(DATE_FORMAT);
+
+            System.out.println("Enter the time: ");
+            String time = scan.nextLine().format(TIME_FORMAT);
+
+            System.out.println("Enter a description of the transaction:");
+            String description = scan.nextLine();
+
+            System.out.println("Enter the vendor: ");
+            String vendor =scan.nextLine();
+
+            System.out.println("Enter the amount");
+            double amount = scan.nextDouble();
+            while(amount < 0){
+                System.out.println("Please Enter an amount greater than 0");
+                amount = scan.nextDouble();
+            }
+            amount = amount * -1;
+
+            builder.append(date).append("|");
+            builder.append(time).append("|");
+            builder.append(description).append("|");
+            builder.append(vendor).append("|");
+            builder.append(amount).append("|");
+
+            String newPayment = builder.toString();
+
+            writer.write(newPayment);
+
+            System.out.println("Deposit recorded successfully.");
+
+        }catch(IOException e)
+        {e.printStackTrace();}
     }
 
     private static void ledgerMenu(Scanner scanner) {
