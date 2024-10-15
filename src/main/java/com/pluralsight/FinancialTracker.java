@@ -1,26 +1,28 @@
 package com.pluralsight;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class FinancialTracker {
 
-    //private static ArrayList<Transaction> transactions = new ArrayList<Transaction>();
+    private static ArrayList<Transactions> ledger = new ArrayList<Transactions>();
     private static final String FILE_NAME = "transactions.csv";
-    private static final String DATE_FORMAT = "yyyy-MM-dd";
-    private static final String TIME_FORMAT = "HH:mm:ss";
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(DATE_FORMAT);
-    private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern(TIME_FORMAT);
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss");
+    public static final String DATE_FORMAT ="yyyy-MM-dd";
+    public static final String TIME_FORMAT = "HH:mm:ss";
 
     public static void main(String[] args) {
         loadTransactions(FILE_NAME);
-        Scanner scanner = new Scanner(System.in);
+        Scanner scan = new Scanner(System.in);
         boolean running = true;
+
+
 
         while (running) {
             System.out.println("Welcome to TransactionApp");
@@ -30,17 +32,17 @@ public class FinancialTracker {
             System.out.println("L) Ledger");
             System.out.println("X) Exit");
 
-            String input = scanner.nextLine().trim();
+            String input = scan.nextLine().trim();
 
             switch (input.toUpperCase()) {
                 case "D":
-                    addDeposit(scanner);
+                    addDeposit(scan);
                     break;
                 case "P":
-                    addPayment(scanner);
+                    addPayment(scan);
                     break;
                 case "L":
-                    ledgerMenu(scanner);
+                    ledgerMenu(scan);
                     break;
                 case "X":
                     running = false;
@@ -51,7 +53,7 @@ public class FinancialTracker {
             }
         }
 
-        scanner.close();
+        scan.close();
     }
 
     public static void loadTransactions(String fileName) {
@@ -63,7 +65,27 @@ public class FinancialTracker {
         // For example: 2023-04-15|10:13:25|ergonomic keyboard|Amazon|-89.50
         // After reading all the transactions, the file should be closed.
         // If any errors occur, an appropriate error message should be displayed.
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) {
+            String line;
+            reader.readLine();
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 5) {
+                    String date = parts[0];
+                    String time = parts[1];
+                    String description = parts[2];
+                    String vendor = parts[3];
+                    double amount = Double.parseDouble(parts[4]);
+                    Transactions transaction = new Transactions(date, time, description, vendor, amount);
+
+                   ledger.add(transaction);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 
     private static void addDeposit(Scanner scan) {
         // This method should prompt the user to enter the date, time, description, vendor, and amount of a deposit.
@@ -72,39 +94,42 @@ public class FinancialTracker {
         // After validating the input, a new `Transaction` object should be created with the entered values.
         // The new deposit should be added to the `transactions` ArrayList.
 
-
         try{
-            StringBuilder builder = new StringBuilder();
+                StringBuilder builder = new StringBuilder();
+                BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true));
 
-            BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true));
             System.out.println("Enter the date:");
-            String date = scan.nextLine().format(DATE_FORMAT);
+            String date = scan.nextLine();
+            String.format(DATE_FORMAT);
 
             System.out.println("Enter the time: ");
-            String time = scan.nextLine().format(TIME_FORMAT);
+            String time = scan.nextLine();
+            time.format(TIME_FORMAT);
 
-            System.out.println("Enter a description of the transaction:");
-            String description = scan.nextLine();
+                System.out.println("Enter a description of the transaction:");
+                String description = scan.nextLine();
 
-            System.out.println("Enter the vendor: ");
-            String vendor =scan.nextLine();
+                System.out.println("Enter the vendor: ");
+                String vendor = scan.nextLine();
 
-            System.out.println("Enter the amount");
-            double amount = scan.nextDouble();
-            while(amount < 0){
-                System.out.println("Please Enter an amount greater than 0");
-                amount = scan.nextDouble();
-            }
+                System.out.println("Enter the amount");
+                double amount = scan.nextDouble();
+                while (amount < 0) {
+                    System.out.println("Please Enter an amount greater than 0");
+                    amount = scan.nextDouble();
+                }
 
-            builder.append(date).append("|");
-            builder.append(time).append("|");
-            builder.append(description).append("|");
-            builder.append(vendor).append("|");
-            builder.append(amount).append("|");
+                builder.append(date).append("|");
+                builder.append(time).append("|");
+                builder.append(description).append("|");
+                builder.append(vendor).append("|");
+                builder.append(amount).append("|");
 
-            String newDeposit = builder.toString();
+                String newDeposit = builder.toString();
+                System.out.println(newDeposit);
 
-            writer.write(newDeposit);
+                writer.write(newDeposit);
+            System.out.println(newDeposit);
 
         }catch(Exception e)
         {e.printStackTrace();}
@@ -122,10 +147,12 @@ public class FinancialTracker {
 
             BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true));
             System.out.println("Enter the date:");
-            String date = scan.nextLine().format(DATE_FORMAT);
+            String date = scan.nextLine();
+            //String.format(DATE_FORMAT);
 
             System.out.println("Enter the time: ");
-            String time = scan.nextLine().format(TIME_FORMAT);
+            String time = scan.nextLine();
+            //time.format(TIME_FORMAT);
 
             System.out.println("Enter a description of the transaction:");
             String description = scan.nextLine();
@@ -194,8 +221,19 @@ public class FinancialTracker {
 
     private static void displayLedger() {
         // This method should display a table of all transactions in the `transactions` ArrayList.
-        // The table should have columns for date, time, description, vendor, and amount.
-    }
+        //The table should have columns for date, time, description, vendor, and amount.
+
+
+        System.out.printf("%-10s %-8s %-20s %-15s %-10s%n", "Date", "Time", "Description", "Vendor", "Amount");
+        for (Transactions transaction : ledger) {
+            System.out.printf("%-10s %-8s %-20s %-15s %-10.2f%n",
+                    transaction.getDate(),
+                    transaction.getTime(),
+                    transaction.getDescription(),
+                    transaction.getVendor(),
+                    transaction.getAmount());
+        }
+        }
 
     private static void displayDeposits() {
         // This method should display a table of all deposits in the `transactions` ArrayList.
