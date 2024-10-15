@@ -1,5 +1,8 @@
 package com.pluralsight;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -62,12 +65,45 @@ public class FinancialTracker {
         // If any errors occur, an appropriate error message should be displayed.
     }
 
-    private static void addDeposit(Scanner scanner) {
+    private static void addDeposit(Scanner scan) {
         // This method should prompt the user to enter the date, time, description, vendor, and amount of a deposit.
         // The user should enter the date and time in the following format: yyyy-MM-dd HH:mm:ss
         // The amount should be a positive number.
         // After validating the input, a new `Transaction` object should be created with the entered values.
         // The new deposit should be added to the `transactions` ArrayList.
+
+
+        try{
+            StringBuilder builder = new StringBuilder();
+
+            BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true));
+            System.out.println("Enter the date:");
+            String DATE_FORMATTER = scan.nextLine();
+
+            System.out.println("Enter the time: ");
+            String TIME_FORMATTER = scan.nextLine();
+
+            System.out.println("Enter a description of the transaction:");
+            String description = scan.nextLine();
+
+            System.out.println("Enter the vendor: ");
+            String vendor =scan.nextLine();
+
+            System.out.println("Enter the amount");
+            double amount = scan.nextDouble();
+
+            builder.append(DATE_FORMATTER).append("|");
+            builder.append(TIME_FORMATTER).append("|");
+            builder.append(description).append("|");
+            builder.append(vendor).append("|");
+            builder.append(amount).append("|");
+
+            String newDeposit = builder.toString();
+
+            writer.write(newDeposit);
+
+        }catch(Exception e)
+        {e.printStackTrace();}
     }
 
     private static void addPayment(Scanner scanner) {

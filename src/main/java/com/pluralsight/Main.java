@@ -19,4 +19,12 @@ public class Main {
         }
 
     }
+public static void addDeposit(Scanner scan){
+
 }
+public static void makePayment(){
+
+}
+
+}
+
