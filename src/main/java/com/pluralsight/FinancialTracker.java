@@ -96,7 +96,7 @@ public class FinancialTracker {
         // The new deposit should be added to the `transactions` ArrayList.
 
         try{
-                
+
                 BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true));
 
             System.out.println("Enter the date (yyyy-MM-dd):");
@@ -230,11 +230,51 @@ public class FinancialTracker {
     private static void displayDeposits() {
         // This method should display a table of all deposits in the `transactions` ArrayList.
         // The table should have columns for date, time, description, vendor, and amount.
+
+        System.out.println("Deposits:");
+        System.out.printf("%-12s %-8s %-30s %-20s %s%n", "Date", "Time", "Description", "Vendor", "Amount");
+        System.out.println("--------------------------------------------------------------------------------");
+
+        boolean hasDeposits = false;
+        for (Transactions transaction : transactions) {
+            if (transaction.getAmount() > 0) {
+                System.out.printf("%-12s %-8s %-30s %-20s %.2f%n",
+                        transaction.getDate(),
+                        transaction.getTime(),
+                        transaction.getDescription(),
+                        transaction.getVendor(),
+                        transaction.getAmount());
+                hasDeposits = true;
+            }
+        }
+        if (!hasDeposits) {
+            System.out.println("No deposits found.");
+        }
     }
 
     private static void displayPayments() {
         // This method should display a table of all payments in the `transactions` ArrayList.
         // The table should have columns for date, time, description, vendor, and amount.
+        System.out.println("Deposits:");
+        System.out.printf("%-12s %-8s %-30s %-20s %s%n", "Date", "Time", "Description", "Vendor", "Amount");
+        System.out.println("--------------------------------------------------------------------------------");
+
+        boolean hasPayments = false;
+        for (Transactions transaction : transactions) {
+            if (transaction.getAmount() > 0) {
+                System.out.printf("%-12s %-8s %-30s %-20s %.2f%n",
+                        transaction.getDate(),
+                        transaction.getTime(),
+                        transaction.getDescription(),
+                        transaction.getVendor(),
+                        transaction.getAmount());
+                hasPayments = true;
+            }
+        }
+        if (!hasPayments) {
+            System.out.println("No deposits found.");
+        }
+
     }
 
     private static void reportsMenu(Scanner scanner) {
@@ -284,6 +324,10 @@ public class FinancialTracker {
         // The method loops through the transactions list and checks each transaction's date against the date range.
         // Transactions that fall within the date range are printed to the console.
         // If no transactions fall within the date range, the method prints a message indicating that there are no results.
+
+
+
+
     }
 
     private static void filterTransactionsByVendor(String vendor) {
