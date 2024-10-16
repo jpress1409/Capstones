@@ -3,6 +3,7 @@ package com.pluralsight;
 import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
@@ -71,8 +72,8 @@ public class FinancialTracker {
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
                 if (parts.length == 5) {
-                    String date = parts[0];
-                    String time = parts[1];
+                    LocalDate date = LocalDate.parse(parts[0]);
+                    LocalTime time = LocalTime.parse(parts[1]);
                     String description = parts[2];
                     String vendor = parts[3];
                     double amount = Double.parseDouble(parts[4]);
@@ -147,11 +148,11 @@ public class FinancialTracker {
 
             BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true));
             System.out.println("Enter the date:");
-            String date = scan.nextLine();
+            LocalDate date = LocalDate.parse(scan.nextLine());
             //String.format(DATE_FORMAT);
 
             System.out.println("Enter the time: ");
-            String time = scan.nextLine();
+            LocalTime time = LocalTime.parse(scan.nextLine());
             //time.format(TIME_FORMAT);
 
             System.out.println("Enter a description of the transaction:");
