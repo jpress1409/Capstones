@@ -403,7 +403,7 @@ public class FinancialTracker {
 
             for (Transactions transaction : transactions) {
 
-                if (vendor.equalsIgnoreCase(search)) {
+                if (search.equalsIgnoreCase(transaction.getVendor())) {
                     System.out.printf("%-12s %-8s %-30s %-20s %.2f%n",
                             transaction.getDate(),
                             transaction.getTime(),
