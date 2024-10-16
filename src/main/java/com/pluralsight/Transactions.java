@@ -1,15 +1,16 @@
 package com.pluralsight;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class Transactions {
 private LocalDate date;
-private LocalDate time;
+private LocalTime time;
 private String description;
 private String vendor;
 private double price;
 
-    public Transactions(LocalDate date, LocalDate time, String description, String vendor, double price) {
+    public Transactions(LocalDate date, LocalTime time, String description, String vendor, double price) {
         this.date = date;
         this.time = time;
         this.description = description;
@@ -25,11 +26,11 @@ private double price;
         this.date = date;
     }
 
-    public LocalDate getTime() {
+    public LocalTime getTime() {
         return time;
     }
 
-    public void setTime(LocalDate time) {
+    public void setTime(LocalTime time) {
         this.time = time;
     }
 

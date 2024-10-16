@@ -2,6 +2,8 @@ package com.pluralsight;
 
 import java.io.*;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
@@ -75,7 +77,7 @@ public class FinancialTracker {
                 String[] parts = line.split("\\|");
                 if (parts.length == 5) {
                     LocalDate date = LocalDate.parse(parts[0]);
-                    LocalDate time = LocalDate.parse(parts[1]);
+                    LocalTime time = LocalTime.parse(parts[1]);
                     String description = parts[2];
                     String vendor = parts[3];
                     double amount = Double.parseDouble(parts[4]);
@@ -107,7 +109,7 @@ public class FinancialTracker {
 
             System.out.println("Enter the time (HH:mm:ss): ");
             String timeInput = scan.nextLine();
-            LocalDate time = LocalDate.parse(timeInput, DateTimeFormatter.ofPattern(TIME_FORMAT));
+            LocalTime time = LocalTime.from(LocalDate.parse(timeInput, DateTimeFormatter.ofPattern(TIME_FORMAT)));
 
 
                 System.out.println("Enter a description of the transaction:");
@@ -154,7 +156,7 @@ public class FinancialTracker {
             System.out.println("Enter the time: ");
             String unformattedTime = scan.nextLine();
 
-            LocalDate time = LocalDate.parse(unformattedTime, TIME_FORMATTER);
+            LocalTime time = LocalTime.from(LocalDate.parse(unformattedTime, TIME_FORMATTER));
 
             System.out.println("Enter a description of the transaction:");
             String description = scan.nextLine();
@@ -283,12 +285,10 @@ public class FinancialTracker {
     }
 
     private static void reportsMenu(Scanner scanner) {
-        LocalDate today = LocalDate.now();
-        LocalDate currentStartDate = today.withDayOfMonth(1);
-        LocalDate currentEndDate = today.withDayOfMonth(today.lengthOfMonth());
+        LocalDate currentDate = LocalDate.now();
 
-        LocalDate previousStartDate = today.minusMonths(1).withDayOfMonth(1);
-        LocalDate previousEndDate = today.minusMonths(1).withDayOfMonth(today.lengthOfMonth());
+
+
 
 
         boolean running = true;
@@ -308,18 +308,34 @@ public class FinancialTracker {
                 case "1":
                     // Generate a report for all transactions within the current month,
                     // including the date, time, description, vendor, and amount for each transaction.
+                    YearMonth currentMonth = YearMonth.from(currentDate);
+                    LocalDate currentStartDate = currentMonth.atDay(1);
+                    LocalDate currentEndDate = currentMonth.atEndOfMonth();
+
                     filterTransactionsByDate(currentStartDate, currentEndDate);
                 case "2":
                     // Generate a report for all transactions within the previous month,
                     // including the date, time, description, vendor, and amount for each transaction.
-                    filterTransactionsByDate(previousStartDate, previousEndDate);
+                    YearMonth previousMonth = YearMonth.from(currentDate.minusMonths(1));
+                    LocalDate previousStartDate = previousMonth.atDay(1);
+                    LocalDate previousEndDate = previousMonth.atEndOfMonth();
+
+                   filterTransactionsByDate(previousStartDate, previousEndDate);
                 case "3":
                     // Generate a report for all transactions within the current year,
                     // including the date, time, description, vendor, and amount for each transaction.
+                    LocalDate currentYearStartDate = LocalDate.of(currentDate.getYear(), 1, 1); // January 1st
+                    LocalDate currentYearEndDate = LocalDate.of(currentDate.getYear(), 12, 31); // December 31st
+
+                    filterTransactionsByDate(currentYearStartDate, currentYearEndDate);
 
                 case "4":
                     // Generate a report for all transactions within the previous year,
                     // including the date, time, description, vendor, and amount for each transaction.
+                    LocalDate previousYearStartDate = LocalDate.of(currentDate.getYear(), 1, 1).minusYears(1); // January 1st
+                    LocalDate previousYearEndDate = LocalDate.of(currentDate.getYear(), 12, 31).minusYears(1); // December 31st
+
+                    filterTransactionsByDate(previousYearStartDate, previousYearEndDate);
                 case "5":
                     // Prompt the user to enter a vendor name, then generate a report for all transactions
                     // with that vendor, including the date, time, description, vendor, and amount for each transaction.
