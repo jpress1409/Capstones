@@ -183,7 +183,7 @@ public class FinancialTracker {
         {e.printStackTrace();}
     }
 
-    private static void ledgerMenu(Scanner scanner) {
+    private static void ledgerMenu(Scanner scan) {
         boolean running = true;
         while (running) {
             System.out.println("Ledger");
@@ -194,7 +194,7 @@ public class FinancialTracker {
             System.out.println("R) Reports");
             System.out.println("H) Home");
 
-            String input = scanner.nextLine().trim();
+            String input = scan.nextLine().trim();
 
             switch (input.toUpperCase()) {
                 case "A":
@@ -207,7 +207,7 @@ public class FinancialTracker {
                     displayPayments();
                     break;
                 case "R":
-                    reportsMenu(scanner);
+                    reportsMenu(scan);
                     break;
                 case "H":
                     running = false;
@@ -284,7 +284,7 @@ public class FinancialTracker {
 
     }
 
-    private static void reportsMenu(Scanner scanner) {
+    private static void reportsMenu(Scanner scan) {
         LocalDate currentDate = LocalDate.now();
 
 
@@ -302,7 +302,7 @@ public class FinancialTracker {
             System.out.println("5) Search by Vendor");
             System.out.println("0) Back");
 
-            String input = scanner.nextLine().trim();
+            String input = scan.nextLine().trim();
 
             switch (input) {
                 case "1":
@@ -313,6 +313,8 @@ public class FinancialTracker {
                     LocalDate currentEndDate = currentMonth.atEndOfMonth();
 
                     filterTransactionsByDate(currentStartDate, currentEndDate);
+
+                    break;
                 case "2":
                     // Generate a report for all transactions within the previous month,
                     // including the date, time, description, vendor, and amount for each transaction.
@@ -321,6 +323,8 @@ public class FinancialTracker {
                     LocalDate previousEndDate = previousMonth.atEndOfMonth();
 
                    filterTransactionsByDate(previousStartDate, previousEndDate);
+
+                   break;
                 case "3":
                     // Generate a report for all transactions within the current year,
                     // including the date, time, description, vendor, and amount for each transaction.
@@ -329,6 +333,7 @@ public class FinancialTracker {
 
                     filterTransactionsByDate(currentYearStartDate, currentYearEndDate);
 
+                    break;
                 case "4":
                     // Generate a report for all transactions within the previous year,
                     // including the date, time, description, vendor, and amount for each transaction.
@@ -339,6 +344,13 @@ public class FinancialTracker {
                 case "5":
                     // Prompt the user to enter a vendor name, then generate a report for all transactions
                     // with that vendor, including the date, time, description, vendor, and amount for each transaction.
+
+                    System.out.println("What vendor would you like to search for?");
+                    String search = scan.nextLine();
+
+                    filterTransactionsByVendor(search);
+
+                    break;
                 case "0":
                     running = false;
                 default:
