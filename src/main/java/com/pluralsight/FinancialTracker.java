@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 public class FinancialTracker {
 
-    private static ArrayList<Transactions> ledger = new ArrayList<Transactions>();
+    private static ArrayList<Transactions> transactions = new ArrayList<Transactions>();
     private static final String FILE_NAME = "transactions.csv";
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss");
@@ -70,7 +70,7 @@ public class FinancialTracker {
             String line;
             reader.readLine();
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
+                String[] parts = line.split("\\|");
                 if (parts.length == 5) {
                     LocalDate date = LocalDate.parse(parts[0]);
                     LocalTime time = LocalTime.parse(parts[1]);
@@ -79,7 +79,7 @@ public class FinancialTracker {
                     double amount = Double.parseDouble(parts[4]);
                     Transactions transaction = new Transactions(date, time, description, vendor, amount);
 
-                   ledger.add(transaction);
+                   transactions.add(transaction);
                 }
             }
         } catch (IOException e) {
@@ -96,16 +96,17 @@ public class FinancialTracker {
         // The new deposit should be added to the `transactions` ArrayList.
 
         try{
-                StringBuilder builder = new StringBuilder();
+                
                 BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true));
 
-            System.out.println("Enter the date:");
-            String date = scan.nextLine();
-            String.format(DATE_FORMAT);
+            System.out.println("Enter the date (yyyy-MM-dd):");
+            String dateInput = scan.nextLine();
+            LocalDate date = LocalDate.parse(dateInput, DateTimeFormatter.ofPattern(DATE_FORMAT));
 
-            System.out.println("Enter the time: ");
-            String time = scan.nextLine();
-            time.format(TIME_FORMAT);
+            System.out.println("Enter the time (HH:mm:ss): ");
+            String timeInput = scan.nextLine();
+            LocalTime time = LocalTime.parse(timeInput, DateTimeFormatter.ofPattern(TIME_FORMAT));
+
 
                 System.out.println("Enter a description of the transaction:");
                 String description = scan.nextLine();
@@ -120,17 +121,12 @@ public class FinancialTracker {
                     amount = scan.nextDouble();
                 }
 
-                builder.append(date).append("|");
-                builder.append(time).append("|");
-                builder.append(description).append("|");
-                builder.append(vendor).append("|");
-                builder.append(amount).append("|");
+            Transactions transaction = new Transactions(date, time, description, vendor, amount);
+            transactions.add(transaction);
 
-                String newDeposit = builder.toString();
-                System.out.println(newDeposit);
+                writer.write(String.format("%s|%s|%s|%s|%.2f%n", dateInput, timeInput, description, vendor, amount));
+                System.out.println("Deposit added: " + transactions);
 
-                writer.write(newDeposit);
-            System.out.println(newDeposit);
 
         }catch(Exception e)
         {e.printStackTrace();}
@@ -159,7 +155,7 @@ public class FinancialTracker {
             String description = scan.nextLine();
 
             System.out.println("Enter the vendor: ");
-            String vendor =scan.nextLine();
+            String vendor = scan.nextLine();
 
             System.out.println("Enter the amount");
             double amount = scan.nextDouble();
@@ -169,17 +165,12 @@ public class FinancialTracker {
             }
             amount = amount * -1;
 
-            builder.append(date).append("|");
-            builder.append(time).append("|");
-            builder.append(description).append("|");
-            builder.append(vendor).append("|");
-            builder.append(amount).append("|");
+            Transactions transaction = new Transactions(date, time, description, vendor, amount);
+            transactions.add(transaction);
 
-            String newPayment = builder.toString();
-
-            writer.write(newPayment);
-
-            System.out.println("Deposit recorded successfully.");
+            // Write to file
+            writer.write(String.format("%s|%s|%s|%s|%.2f%n", date, time, description, vendor, amount));
+            System.out.println("Payment recorded successfully.");
 
         }catch(IOException e)
         {e.printStackTrace();}
@@ -226,7 +217,7 @@ public class FinancialTracker {
 
 
         System.out.printf("%-10s %-8s %-20s %-15s %-10s%n", "Date", "Time", "Description", "Vendor", "Amount");
-        for (Transactions transaction : ledger) {
+        for (Transactions transaction : transactions) {
             System.out.printf("%-10s %-8s %-20s %-15s %-10.2f%n",
                     transaction.getDate(),
                     transaction.getTime(),
