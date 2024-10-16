@@ -2,8 +2,6 @@ package com.pluralsight;
 
 import java.io.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
@@ -19,6 +17,10 @@ public class FinancialTracker {
     public static final String TIME_FORMAT = "HH:mm:ss";
 
     public static void main(String[] args) {
+
+
+
+
         loadTransactions(FILE_NAME);
         Scanner scan = new Scanner(System.in);
         boolean running = true;
@@ -73,7 +75,7 @@ public class FinancialTracker {
                 String[] parts = line.split("\\|");
                 if (parts.length == 5) {
                     LocalDate date = LocalDate.parse(parts[0]);
-                    LocalTime time = LocalTime.parse(parts[1]);
+                    LocalDate time = LocalDate.parse(parts[1]);
                     String description = parts[2];
                     String vendor = parts[3];
                     double amount = Double.parseDouble(parts[4]);
@@ -105,7 +107,7 @@ public class FinancialTracker {
 
             System.out.println("Enter the time (HH:mm:ss): ");
             String timeInput = scan.nextLine();
-            LocalTime time = LocalTime.parse(timeInput, DateTimeFormatter.ofPattern(TIME_FORMAT));
+            LocalDate time = LocalDate.parse(timeInput, DateTimeFormatter.ofPattern(TIME_FORMAT));
 
 
                 System.out.println("Enter a description of the transaction:");
@@ -144,12 +146,15 @@ public class FinancialTracker {
 
             BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true));
             System.out.println("Enter the date:");
-            LocalDate date = LocalDate.parse(scan.nextLine());
-            //String.format(DATE_FORMAT);
+            String unformattedDate = scan.nextLine();
+
+            LocalDate date = LocalDate.parse(unformattedDate, DATE_FORMATTER);
+
 
             System.out.println("Enter the time: ");
-            LocalTime time = LocalTime.parse(scan.nextLine());
-            //time.format(TIME_FORMAT);
+            String unformattedTime = scan.nextLine();
+
+            LocalDate time = LocalDate.parse(unformattedTime, TIME_FORMATTER);
 
             System.out.println("Enter a description of the transaction:");
             String description = scan.nextLine();
@@ -278,6 +283,14 @@ public class FinancialTracker {
     }
 
     private static void reportsMenu(Scanner scanner) {
+        LocalDate today = LocalDate.now();
+        LocalDate currentStartDate = today.withDayOfMonth(1);
+        LocalDate currentEndDate = today.withDayOfMonth(today.lengthOfMonth());
+
+        LocalDate previousStartDate = today.minusMonths(1).withDayOfMonth(1);
+        LocalDate previousEndDate = today.minusMonths(1).withDayOfMonth(today.lengthOfMonth());
+
+
         boolean running = true;
         while (running) {
             System.out.println("Reports");
@@ -295,9 +308,11 @@ public class FinancialTracker {
                 case "1":
                     // Generate a report for all transactions within the current month,
                     // including the date, time, description, vendor, and amount for each transaction.
+                    filterTransactionsByDate(currentStartDate, currentEndDate);
                 case "2":
                     // Generate a report for all transactions within the previous month,
                     // including the date, time, description, vendor, and amount for each transaction.
+                    filterTransactionsByDate(previousStartDate, previousEndDate);
                 case "3":
                     // Generate a report for all transactions within the current year,
                     // including the date, time, description, vendor, and amount for each transaction.
@@ -324,10 +339,30 @@ public class FinancialTracker {
         // The method loops through the transactions list and checks each transaction's date against the date range.
         // Transactions that fall within the date range are printed to the console.
         // If no transactions fall within the date range, the method prints a message indicating that there are no results.
+        boolean hasDate = false;
 
 
+        System.out.println("Transactions from " + startDate + " to " + endDate + ":");
+        System.out.printf("%-12s %-8s %-30s %-20s %s%n", "Date", "Time", "Description", "Vendor", "Amount");
+        System.out.println("--------------------------------------------------------------------------------");
 
 
+    for (Transactions transaction : transactions) {
+        // Check if the transaction date is within the specified range
+        if (!transaction.getDate().isBefore(startDate) && !transaction.getDate().isAfter(endDate)) {
+            System.out.printf("%-12s %-8s %-30s %-20s %.2f%n",
+                    transaction.getDate(),
+                    transaction.getTime(),
+                    transaction.getDescription(),
+                    transaction.getVendor(),
+                    transaction.getAmount());
+            hasDate= true;
+        }
+    }
+
+    if (!hasDate) {
+        System.out.println("No transactions found within the specified date range.");
+    }
     }
 
     private static void filterTransactionsByVendor(String vendor) {
@@ -336,5 +371,37 @@ public class FinancialTracker {
         // The method loops through the transactions list and checks each transaction's vendor name against the specified vendor name.
         // Transactions with a matching vendor name are printed to the console.
         // If no transactions match the specified vendor name, the method prints a message indicating that there are no results.
-    }
+
+        boolean hasVendor = false;
+
+        Scanner scan = new Scanner(System.in);
+        System.out.println("What vendor would you like to search for?");
+        String search = scan.nextLine();
+
+        System.out.println("Transactions involving Vendor " + vendor);
+        System.out.printf("%-12s %-8s %-30s %-20s %s%n", "Date", "Time", "Description", "Vendor", "Amount");
+        System.out.println("--------------------------------------------------------------------------------");
+
+
+
+
+            for (Transactions transaction : transactions) {
+
+                if (vendor.equalsIgnoreCase(search)) {
+                    System.out.printf("%-12s %-8s %-30s %-20s %.2f%n",
+                            transaction.getDate(),
+                            transaction.getTime(),
+                            transaction.getDescription(),
+                            transaction.getVendor(),
+                            transaction.getAmount());
+                    hasVendor = true;
+                }
+            }
+
+            if (!hasVendor) {
+                System.out.println("No transactions found within the specified date range.");
+            }
+
+        }
 }
+
