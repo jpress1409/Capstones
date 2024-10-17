@@ -104,12 +104,12 @@ public class FinancialTracker {
                 BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true));
 
             System.out.println("Enter the date (yyyy-MM-dd):");
-            String dateInput = scan.nextLine();
-            LocalDate date = LocalDate.parse(dateInput, DateTimeFormatter.ofPattern(DATE_FORMAT));
+            String unformattedDate = scan.nextLine();
+            LocalDate date = LocalDate.parse(unformattedDate, DATE_FORMATTER);
 
             System.out.println("Enter the time (HH:mm:ss): ");
-            String timeInput = scan.nextLine();
-            LocalTime time = LocalTime.from(LocalDate.parse(timeInput, DateTimeFormatter.ofPattern(TIME_FORMAT)));
+            String unformattedTime = scan.nextLine();
+            LocalTime time = LocalTime.parse(unformattedTime, TIME_FORMATTER);
 
 
                 System.out.println("Enter a description of the transaction:");
@@ -128,7 +128,7 @@ public class FinancialTracker {
             Transactions transaction = new Transactions(date, time, description, vendor, amount);
             transactions.add(transaction);
 
-                writer.write(String.format("%s|%s|%s|%s|%.2f%n", dateInput, timeInput, description, vendor, amount));
+                writer.write(String.format("%s|%s|%s|%s|%.2f%n", date, time, description, vendor, amount));
                 System.out.println("Deposit added: " + transactions);
 
 
@@ -144,7 +144,6 @@ public class FinancialTracker {
         // The new payment should be added to the `transactions` ArrayList.
 
         try{
-            StringBuilder builder = new StringBuilder();
 
             BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true));
             System.out.println("Enter the date:");
@@ -156,7 +155,7 @@ public class FinancialTracker {
             System.out.println("Enter the time: ");
             String unformattedTime = scan.nextLine();
 
-            LocalTime time = LocalTime.from(LocalDate.parse(unformattedTime, TIME_FORMATTER));
+            LocalTime time = LocalTime.parse(unformattedTime, TIME_FORMATTER);
 
             System.out.println("Enter a description of the transaction:");
             String description = scan.nextLine();
@@ -211,6 +210,7 @@ public class FinancialTracker {
                     break;
                 case "H":
                     running = false;
+                    break;
                 default:
                     System.out.println("Invalid option");
                     break;
@@ -341,6 +341,7 @@ public class FinancialTracker {
                     LocalDate previousYearEndDate = LocalDate.of(currentDate.getYear(), 12, 31).minusYears(1); // December 31st
 
                     filterTransactionsByDate(previousYearStartDate, previousYearEndDate);
+                    break;
                 case "5":
                     // Prompt the user to enter a vendor name, then generate a report for all transactions
                     // with that vendor, including the date, time, description, vendor, and amount for each transaction.
@@ -353,6 +354,7 @@ public class FinancialTracker {
                     break;
                 case "0":
                     running = false;
+                    break;
                 default:
                     System.out.println("Invalid option");
                     break;
@@ -402,14 +404,11 @@ public class FinancialTracker {
 
         boolean hasVendor = false;
 
-        Scanner scan = new Scanner(System.in);
-        System.out.println("What vendor would you like to search for?");
-        String search = scan.nextLine();
-
         System.out.println("Transactions involving Vendor " + vendor);
         System.out.printf("%-12s %-8s %-30s %-20s %s%n", "Date", "Time", "Description", "Vendor", "Amount");
         System.out.println("--------------------------------------------------------------------------------");
-
+        Scanner scan = new Scanner(System.in);
+        String search = scan.nextLine();
 
 
 
