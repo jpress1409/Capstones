@@ -61,14 +61,6 @@ public class FinancialTracker {
     }
 
     public static void loadTransactions(String fileName) {
-        // This method should load transactions from a file with the given file name.
-        // If the file does not exist, it should be created.
-        // The transactions should be stored in the `transactions` ArrayList.
-        // Each line of the file represents a single transaction in the following format:
-        // <date>|<time>|<description>|<vendor>|<amount>
-        // For example: 2023-04-15|10:13:25|ergonomic keyboard|Amazon|-89.50
-        // After reading all the transactions, the file should be closed.
-        // If any errors occur, an appropriate error message should be displayed.
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) {
             String line;
             reader.readLine();
@@ -92,12 +84,6 @@ public class FinancialTracker {
 
 
     private static void addDeposit(Scanner scan) {
-        // This method should prompt the user to enter the date, time, description, vendor, and amount of a deposit.
-        // The user should enter the date and time in the following format: yyyy-MM-dd HH:mm:ss
-        // The amount should be a positive number.
-        // After validating the input, a new `Transaction` object should be created with the entered values.
-        // The new deposit should be added to the `transactions` ArrayList.
-
         try{
 
                 BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true));
@@ -136,12 +122,6 @@ public class FinancialTracker {
     }
 
     private static void addPayment(Scanner scan) {
-        // This method should prompt the user to enter the date, time, description, vendor, and amount of a payment.
-        // The user should enter the date and time in the following format: yyyy-MM-dd HH:mm:ss
-        // The amount received should be a positive number then transformed to a negative number.
-        // After validating the input, a new `Transaction` object should be created with the entered values.
-        // The new payment should be added to the `transactions` ArrayList.
-
         try{
 
             BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true));
@@ -218,10 +198,6 @@ public class FinancialTracker {
     }
 
     private static void displayLedger() {
-        // This method should display a table of all transactions in the `transactions` ArrayList.
-        //The table should have columns for date, time, description, vendor, and amount.
-
-
         System.out.printf("%-10s %-8s %-20s %-15s %-10s%n", "Date", "Time", "Description", "Vendor", "Amount");
         for (Transactions transaction : transactions) {
             System.out.printf("%-10s %-8s %-20s %-15s %-10.2f%n",
@@ -259,8 +235,6 @@ public class FinancialTracker {
     }
 
     private static void displayPayments() {
-        // This method should display a table of all payments in the `transactions` ArrayList.
-        // The table should have columns for date, time, description, vendor, and amount.
         System.out.println("Deposits:");
         System.out.printf("%-12s %-8s %-30s %-20s %s%n", "Date", "Time", "Description", "Vendor", "Amount");
         System.out.println("--------------------------------------------------------------------------------");
@@ -286,10 +260,6 @@ public class FinancialTracker {
     private static void reportsMenu(Scanner scan) {
         LocalDate currentDate = LocalDate.now();
 
-
-
-
-
         boolean running = true;
         while (running) {
             System.out.println("Reports");
@@ -305,8 +275,6 @@ public class FinancialTracker {
 
             switch (input) {
                 case "1":
-                    // Generate a report for all transactions within the current month,
-                    // including the date, time, description, vendor, and amount for each transaction.
                     YearMonth currentMonth = YearMonth.from(currentDate);
                     LocalDate currentStartDate = currentMonth.atDay(1);
                     LocalDate currentEndDate = currentMonth.atEndOfMonth();
@@ -315,8 +283,6 @@ public class FinancialTracker {
 
                     break;
                 case "2":
-                    // Generate a report for all transactions within the previous month,
-                    // including the date, time, description, vendor, and amount for each transaction.
                     YearMonth previousMonth = YearMonth.from(currentDate.minusMonths(1));
                     LocalDate previousStartDate = previousMonth.atDay(1);
                     LocalDate previousEndDate = previousMonth.atEndOfMonth();
@@ -325,8 +291,6 @@ public class FinancialTracker {
 
                    break;
                 case "3":
-                    // Generate a report for all transactions within the current year,
-                    // including the date, time, description, vendor, and amount for each transaction.
                     LocalDate currentYearStartDate = LocalDate.of(currentDate.getYear(), 1, 1); // January 1st
                     LocalDate currentYearEndDate = LocalDate.of(currentDate.getYear(), 12, 31); // December 31st
 
@@ -334,17 +298,12 @@ public class FinancialTracker {
 
                     break;
                 case "4":
-                    // Generate a report for all transactions within the previous year,
-                    // including the date, time, description, vendor, and amount for each transaction.
                     LocalDate previousYearStartDate = LocalDate.of(currentDate.getYear(), 1, 1).minusYears(1); // January 1st
                     LocalDate previousYearEndDate = LocalDate.of(currentDate.getYear(), 12, 31).minusYears(1); // December 31st
 
                     filterTransactionsByDate(previousYearStartDate, previousYearEndDate);
                     break;
                 case "5":
-                    // Prompt the user to enter a vendor name, then generate a report for all transactions
-                    // with that vendor, including the date, time, description, vendor, and amount for each transaction.
-
                     System.out.println("What vendor would you like to search for?");
                     String search = scan.nextLine();
 
@@ -363,11 +322,6 @@ public class FinancialTracker {
 
 
     private static void filterTransactionsByDate(LocalDate startDate, LocalDate endDate) {
-        // This method filters the transactions by date and prints a report to the console.
-        // It takes two parameters: startDate and endDate, which represent the range of dates to filter by.
-        // The method loops through the transactions list and checks each transaction's date against the date range.
-        // Transactions that fall within the date range are printed to the console.
-        // If no transactions fall within the date range, the method prints a message indicating that there are no results.
         boolean hasDate = false;
 
 
@@ -377,7 +331,6 @@ public class FinancialTracker {
 
 
     for (Transactions transaction : transactions) {
-        // Check if the transaction date is within the specified range
         if (!transaction.getDate().isBefore(startDate) && !transaction.getDate().isAfter(endDate)) {
             System.out.printf("%-12s %-8s %-30s %-20s %.2f%n",
                     transaction.getDate(),
@@ -395,12 +348,6 @@ public class FinancialTracker {
     }
 
     private static void filterTransactionsByVendor(String vendor) {
-        // This method filters the transactions by vendor and prints a report to the console.
-        // It takes one parameter: vendor, which represents the name of the vendor to filter by.
-        // The method loops through the transactions list and checks each transaction's vendor name against the specified vendor name.
-        // Transactions with a matching vendor name are printed to the console.
-        // If no transactions match the specified vendor name, the method prints a message indicating that there are no results.
-
         boolean hasVendor = false;
 
         System.out.println("Transactions involving Vendor " + vendor);
