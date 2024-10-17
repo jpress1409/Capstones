@@ -4,8 +4,6 @@
 
 This application is a way to keep track of business transactions and organize them by date, vendor and type. The purpose is to streamline accounting for business and the any business owner would benefit from using this app.
 
-![Class Diagram](path/to/your/class_diagram.png)
-
 ## User Stories
 
 List the user stories that guided the development of your application. Format these stories as: "As a [type of user], I want [some goal] so that [some reason]."
@@ -46,9 +44,12 @@ Follow these steps to get your application running within IntelliJ IDEA:
 
 ## Demo
 
-Include screenshots or GIFs that show your application in action. Use tools like [Giphy Capture](https://giphy.com/apps/giphycapture) to record a GIF of your application.
-
-![Application Screenshot](path/to/your/screenshot.png)
+![MTD Report]("C:\Users\jpres\Pictures\Screenshots\MTDReport.png")
+![Search By Vendor]("C:\Users\jpres\Pictures\Screenshots\SearchByVendor.png")
+![YTD Report]("C:\Users\jpres\Pictures\Screenshots\YTDReport.png")
+![All Transactions]("C:\Users\jpres\Pictures\Screenshots\AllTransactions.png")
+![Add Deposit]("C:\Users\jpres\Pictures\Screenshots\AddDeposit.png")
+![Home Screen]("C:\Users\jpres\Pictures\Screenshots\HomeScreen.png")
 
 ## Future Work
 
