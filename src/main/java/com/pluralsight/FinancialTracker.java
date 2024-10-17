@@ -294,9 +294,9 @@ public class FinancialTracker {
                     break;
                 case "5":
                     System.out.println("What vendor would you like to search for?");
-                    String search = scan.nextLine();
+                    String vendor = scan.nextLine();
 
-                    filterTransactionsByVendor(search);
+                    filterTransactionsByVendor(vendor);
 
                     break;
                 case "0":
@@ -317,7 +317,6 @@ public class FinancialTracker {
         System.out.println("Transactions from " + startDate + " to " + endDate + ":");
         System.out.printf("%-12s %-8s %-30s %-20s %s%n", "Date", "Time", "Description", "Vendor", "Amount");
         System.out.println("--------------------------------------------------------------------------------");
-
 
     for (Transactions transaction : transactions) {
         if (!transaction.getDate().isBefore(startDate) && !transaction.getDate().isAfter(endDate)) {
@@ -342,12 +341,10 @@ public class FinancialTracker {
         System.out.println("Transactions involving Vendor " + vendor);
         System.out.printf("%-12s %-8s %-30s %-20s %s%n", "Date", "Time", "Description", "Vendor", "Amount");
         System.out.println("--------------------------------------------------------------------------------");
-        Scanner scan = new Scanner(System.in);
-        String search = scan.nextLine();
 
             for (Transactions transaction : transactions) {
 
-                if (search.equalsIgnoreCase(transaction.getVendor())) {
+                if (vendor.equalsIgnoreCase(transaction.getVendor())) {
                     System.out.printf("%-12s %-8s %-30s %-20s %.2f%n",
                             transaction.getDate(),
                             transaction.getTime(),
