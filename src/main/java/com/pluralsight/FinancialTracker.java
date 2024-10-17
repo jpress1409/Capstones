@@ -133,7 +133,7 @@ public class FinancialTracker {
             double amount = scan.nextDouble();
 
             //while loop to validate positive amount
-            while(amount < 0){
+            while(amount > 0){
                 System.out.println("Please Enter an amount greater than 0");
                 amount = scan.nextDouble();
             }
@@ -230,7 +230,7 @@ public class FinancialTracker {
 
         boolean hasPayments = false;
         for (Transactions transaction : transactions) {
-            if (transaction.getAmount() > 0) {
+            if (transaction.getAmount() < 0) {
                 System.out.printf("%-12s %-8s %-30s %-20s %.2f%n",
                         transaction.getDate(),
                         transaction.getTime(),
@@ -344,7 +344,7 @@ public class FinancialTracker {
         System.out.println("--------------------------------------------------------------------------------");
         Scanner scan = new Scanner(System.in);
         String search = scan.nextLine();
-        
+
             for (Transactions transaction : transactions) {
 
                 if (search.equalsIgnoreCase(transaction.getVendor())) {
