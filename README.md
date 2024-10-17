@@ -34,8 +34,15 @@ Follow these steps to get your application running within IntelliJ IDEA:
 
 ## Technologies Used
 
-- Java: Mention the version you are using.
-- Any additional libraries or frameworks used in the project.
+- Java: Java 17.0.12 Amazon Corretto
+- Classes used:
+  - java.time.LocalTime
+  - java.time.LocalDate
+  - java.time.YearMonth
+  - java.time.format.DateTimeFormatter
+  - java.util.ArrayList
+  - java.util.Scanner
+  - java.io.*
 
 ## Demo
 
