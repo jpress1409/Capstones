@@ -52,26 +52,25 @@ Include screenshots or GIFs that show your application in action. Use tools like
 
 ## Future Work
 
-Outline potential future enhancements or functionalities you might consider adding:
+Potential added functionality:
 
-- Additional feature to be developed.
-- Improvement of current functionalities.
+- The functionality that could most improve this application is a GUI to make it more user friendly.
+- 
 
 ## Resources
 
 List resources such as tutorials, articles, or documentation that helped you during the project.
 
-- [Java Programming Tutorial](https://www.example.com)
-- [Effective Java](https://www.example.com)
+- [Oracle YearMonth Article] (https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/YearMonth.html)
+
 
 ## Team Members
 
-- **Name 1** - Specific contributions or roles.
-- **Name 2** - Specific contributions or roles.
+- **Joseph Pressley** - Created Trnasactions Class, filled in methods and created main method.
+- **Raymond Mouron** - Creaded Methods in FinancialTracker Class and imported classes. 
+
 
 ## Thanks
 
-Express gratitude towards those who provided help, guidance, or resources:
 
-- Thank you to [Mentor's Name] for continuous support and guidance.
-- A special thanks to all teammates for their dedication and teamwork.
+- Thank you to Raymond Mouron for continuous support and guidance.
