@@ -10,23 +10,16 @@ import java.util.Scanner;
 
 public class FinancialTracker {
 
-    private static ArrayList<Transactions> transactions = new ArrayList<Transactions>();
+    private static final ArrayList<Transactions> transactions = new ArrayList<Transactions>();
     private static final String FILE_NAME = "transactions.csv";
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss");
-    public static final String DATE_FORMAT ="yyyy-MM-dd";
-    public static final String TIME_FORMAT = "HH:mm:ss";
 
     public static void main(String[] args) {
-
-
-
 
         loadTransactions(FILE_NAME);
         Scanner scan = new Scanner(System.in);
         boolean running = true;
-
-
 
         while (running) {
             System.out.println("Welcome to TransactionApp");
@@ -37,7 +30,8 @@ public class FinancialTracker {
             System.out.println("X) Exit");
 
             String input = scan.nextLine().trim();
-
+            /*One return form initial method switch defaults to "Invalid Option"
+            * Unsure why this behavior persists.*/
             switch (input.toUpperCase()) {
                 case "D":
                     addDeposit(scan);
@@ -56,10 +50,8 @@ public class FinancialTracker {
                     break;
             }
         }
-
         scan.close();
     }
-
     public static void loadTransactions(String fileName) {
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) {
             String line;
@@ -81,12 +73,8 @@ public class FinancialTracker {
             e.printStackTrace();
         }
     }
-
-
     private static void addDeposit(Scanner scan) {
-        try{
-
-                BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true));
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true));){
 
             System.out.println("Enter the date (yyyy-MM-dd):");
             String unformattedDate = scan.nextLine();
@@ -96,25 +84,26 @@ public class FinancialTracker {
             String unformattedTime = scan.nextLine();
             LocalTime time = LocalTime.parse(unformattedTime, TIME_FORMATTER);
 
+            System.out.println("Enter a description of the transaction:");
+            String description = scan.nextLine();
 
-                System.out.println("Enter a description of the transaction:");
-                String description = scan.nextLine();
+            System.out.println("Enter the vendor: ");
+            String vendor = scan.nextLine();
 
-                System.out.println("Enter the vendor: ");
-                String vendor = scan.nextLine();
+            System.out.println("Enter the amount");
+            double amount = scan.nextDouble();
 
-                System.out.println("Enter the amount");
-                double amount = scan.nextDouble();
-                while (amount < 0) {
-                    System.out.println("Please Enter an amount greater than 0");
-                    amount = scan.nextDouble();
-                }
+            //While loop to valid positive amount
+            while (amount < 0) {
+                System.out.println("Please Enter an amount greater than 0");
+                amount = scan.nextDouble();
+            }
 
             Transactions transaction = new Transactions(date, time, description, vendor, amount);
             transactions.add(transaction);
 
-                writer.write(String.format("%s|%s|%s|%s|%.2f%n", date, time, description, vendor, amount));
-                System.out.println("Deposit added: " + transactions);
+            writer.write(String.format("%s|%s|%s|%s|%.2f%n", date, time, description, vendor, amount));
+            System.out.println("Deposit added: " + transactions);
 
 
         }catch(Exception e)
@@ -122,14 +111,12 @@ public class FinancialTracker {
     }
 
     private static void addPayment(Scanner scan) {
-        try{
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true));){
 
-            BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true));
             System.out.println("Enter the date:");
             String unformattedDate = scan.nextLine();
 
             LocalDate date = LocalDate.parse(unformattedDate, DATE_FORMATTER);
-
 
             System.out.println("Enter the time: ");
             String unformattedTime = scan.nextLine();
@@ -144,16 +131,18 @@ public class FinancialTracker {
 
             System.out.println("Enter the amount");
             double amount = scan.nextDouble();
+
+            //while loop to validate positive amount
             while(amount < 0){
                 System.out.println("Please Enter an amount greater than 0");
                 amount = scan.nextDouble();
             }
+            //amount multiplied by -1 to make negative
             amount = amount * -1;
 
             Transactions transaction = new Transactions(date, time, description, vendor, amount);
             transactions.add(transaction);
-
-            // Write to file
+                //Formatting to align items with proper columns and add zeros to amount
             writer.write(String.format("%s|%s|%s|%s|%.2f%n", date, time, description, vendor, amount));
             System.out.println("Payment recorded successfully.");
 
@@ -198,6 +187,8 @@ public class FinancialTracker {
     }
 
     private static void displayLedger() {
+
+        //formatting to align items with correct columns
         System.out.printf("%-10s %-8s %-20s %-15s %-10s%n", "Date", "Time", "Description", "Vendor", "Amount");
         for (Transactions transaction : transactions) {
             System.out.printf("%-10s %-8s %-20s %-15s %-10.2f%n",
@@ -210,8 +201,6 @@ public class FinancialTracker {
         }
 
     private static void displayDeposits() {
-        // This method should display a table of all deposits in the `transactions` ArrayList.
-        // The table should have columns for date, time, description, vendor, and amount.
 
         System.out.println("Deposits:");
         System.out.printf("%-12s %-8s %-30s %-20s %s%n", "Date", "Time", "Description", "Vendor", "Amount");
@@ -355,9 +344,7 @@ public class FinancialTracker {
         System.out.println("--------------------------------------------------------------------------------");
         Scanner scan = new Scanner(System.in);
         String search = scan.nextLine();
-
-
-
+        
             for (Transactions transaction : transactions) {
 
                 if (search.equalsIgnoreCase(transaction.getVendor())) {
