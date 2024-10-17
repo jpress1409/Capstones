@@ -1,8 +1,8 @@
-# Project Title
+# Virtual Business Ledger
 
-## Description of the Project
+## Accounting Tool for Businesses
 
-Briefly describe what this Java console application does. Mention its purpose and who the intended users are. Explain the main functionality and what problems it aims to solve.
+This application is a way to keep track of business transactions and organize them by date, vendor and type. The purpose is to streamline accounting for business and the any business owner would benefit from using this app.
 
 ![Class Diagram](path/to/your/class_diagram.png)
 
@@ -12,7 +12,7 @@ List the user stories that guided the development of your application. Format th
 
 - As a user, I want to be able to input my data, so that the application can process it accordingly.
 - As a user, I want to receive immediate feedback, so I can understand what to do next.
-
+- As a [type of user], I want [some goal] so that [some reason].
 ## Setup
 
 Instructions on how to set up and run the project using IntelliJ IDEA.
